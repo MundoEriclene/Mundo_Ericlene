@@ -1,0 +1,133 @@
+/* Tema escuro para Mundo Ericlene */
+body {
+    background-color: #121212;
+    color: #E0E0E0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    display: flex;
+    align-items: center;
+    background-color: #1F1F1F;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  header .logo img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+  
+  header h1 {
+    flex-grow: 1;
+    font-size: 1.5rem;
+    color: #BB86FC;
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+  }
+  
+  nav ul li a {
+    color: #E0E0E0;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  nav ul li a:hover {
+    color: #BB86FC;
+  }
+  
+  main {
+    padding: 20px;
+  }
+  
+  section {
+    background-color: #1E1E1E;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  section h2 {
+    color: #BB86FC;
+  }
+  
+  form label {
+    display: block;
+    margin: 10px 0 5px;
+  }
+  
+  form input, form select, form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  form input, form select {
+    background-color: #333;
+    color: #E0E0E0;
+  }
+  
+  form button {
+    background-color: #BB86FC;
+    color: #121212;
+    cursor: pointer;
+  }
+  
+  form button:hover {
+    background-color: #3700B3;
+  }
+  
+  footer {
+    background-color: #1F1F1F;
+    padding: 10px 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .menu-inferior ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-inferior ul li a {
+    color: #E0E0E0;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+  .menu-inferior ul li a:hover {
+    color: #BB86FC;
+  }
+  
+  .whatsapp-button {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    background-color: #25D366;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+  
+  .whatsapp-button:hover {
+    background-color: #128C7E;
+  }
+  

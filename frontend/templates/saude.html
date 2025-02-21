@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundo Ericlene - Saúde</title>
+  <link rel="icon" href="/assets/img/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/frontend/css/saude.css">
+  <link rel="manifest" href="/assets/manifest.json">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/assets/img/logo.png" alt="Logo Mundo Ericlene">
+    </div>
+    <h1>Mundo Ericlene</h1>
+    <nav>
+      <ul>
+        <li><a href="#sono">Sono</a></li>
+        <li><a href="#alimentacao">Alimentação</a></li>
+        <li><a href="#exercicios">Exercícios</a></li>
+        <li><a href="#higiene">Higiene Pessoal</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main>
+    <section id="sono">
+      <h2>Sono</h2>
+      <p>Registre e avalie a qualidade e duração do seu sono.</p>
+      <form>
+        <label for="horarioDormir">Horário de dormir:</label>
+        <input type="time" id="horarioDormir">
+        <label for="horarioAcordar">Horário de acordar:</label>
+        <input type="time" id="horarioAcordar">
+        <label for="qualidadeSono">Qualidade do sono (1-10):</label>
+        <input type="number" id="qualidadeSono" min="1" max="10">
+        <button type="submit">Salvar</button>
+      </form>
+    </section>
+
+    <section id="alimentacao">
+      <h2>Alimentação</h2>
+      <p>Monitore suas refeições e hidratação.</p>
+      <form>
+        <label for="calorias">Calorias ingeridas:</label>
+        <input type="number" id="calorias">
+        <label for="hidratacao">Copos de água (meta diária):</label>
+        <input type="number" id="hidratacao" min="0">
+        <button type="submit">Salvar</button>
+      </form>
+    </section>
+
+    <section id="exercicios">
+      <h2>Exercícios</h2>
+      <p>Registre suas atividades físicas, mentais e emocionais.</p>
+      <form>
+        <label for="tipoExercicio">Tipo de exercício:</label>
+        <select id="tipoExercicio">
+          <option value="fisico">Físico</option>
+          <option value="mental">Mental</option>
+          <option value="emocional">Emocional</option>
+        </select>
+        <label for="duracaoExercicio">Duração (minutos):</label>
+        <input type="number" id="duracaoExercicio">
+        <button type="submit">Salvar</button>
+      </form>
+    </section>
+
+    <section id="higiene">
+      <h2>Higiene Pessoal</h2>
+      <p>Monitore seus hábitos de higiene.</p>
+      <form>
+        <label>
+          <input type="checkbox" id="escovacao"> Escovou os dentes?
+        </label>
+        <label>
+          <input type="checkbox" id="banho"> Tomou banho?
+        </label>
+        <button type="submit">Salvar</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <nav class="menu-inferior">
+      <ul>
+        <li><a href="#produtividade">Produtividade</a></li>
+        <li><a href="#bem-estar">Bem-estar</a></li>
+        <li><a href="#aprendizado">Aprendizado</a></li>
+        <li><a href="#financas">Finanças</a></li>
+        <li><a href="#habilidades">Habilidades</a></li>
+      </ul>
+    </nav>
+    <a href="https://wa.me/seunumerodetelefone" target="_blank" class="whatsapp-button">
+      Fale comigo no WhatsApp
+    </a>
+  </footer>
+
+  <script src="/frontend/js/saude.js"></script>
+  <script src="/js/notifications.js"></script>
+</body>
+</html>
