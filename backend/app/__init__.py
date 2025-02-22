@@ -1,4 +1,10 @@
 from flask import Flask
+from backend.app.routes import rotas_sono
+
+def criar_app():
+    app = Flask(__name__)
+    app.register_blueprint(rotas_sono)
+    return app
 
 # Criar o app Flask
 app = Flask(__name__)

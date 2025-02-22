@@ -1,4 +1,4 @@
-from flask import Flask, request  # ✅ Adicionado 'request' aqui
+from flask import Flask, request, jsonify  # ✅ Adicionado 'jsonify'
 from flask_cors import CORS
 import os
 
@@ -13,9 +13,12 @@ def log_request():
 @app.route('/saude/sono', methods=['POST'])
 def salvar_sono():
     data = request.get_json()
-    # Processar os dados...
-    return jsonify({"message": "Dados de sono salvos com sucesso!"}), 200
+    if not data:
+        return jsonify({"message": "❌ Dados não recebidos."}), 400  # ✅ Retorno em caso de erro
 
+    # Aqui você pode adicionar lógica para salvar os dados no banco de dados
+    print(f"✅ Dados recebidos: {data}")
+    return jsonify({"message": "Dados de sono salvos com sucesso!"}), 200
 
 @app.route("/")
 def home():

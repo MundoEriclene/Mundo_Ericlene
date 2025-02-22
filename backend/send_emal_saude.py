@@ -1,51 +1,52 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from app.maquina_relatorios import gerar_relatorio_sono  # Corrigida a importação
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import openai
 
-# Configuração das variáveis a partir do Render
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USER = os.getenv("EMAIL_USER")  # Deve ser configurado no Render
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")  # Deve ser configurado no Render
-EMAIL_RECIPIENTS = os.getenv("EMAIL_RECIPIENTS", "").split(",")  # Deve ser configurado como lista separada por vírgula no Render
+# Configurar as credenciais usando variáveis de ambiente
+openai.api_key = os.getenv("OPENAI_API_KEY")
+remetente = os.getenv("EMAIL_USER")
+senha = os.getenv("EMAIL_PASSWORD")
 
-# Função para enviar e-mail
-def enviar_email_relatorio():
-    # Gerar o relatório
-    relatorio = gerar_relatorio_sono()
+# Gerar resposta usando a OpenAI
+def gerar_resposta_openai(mensagem):
+    try:
+        resposta = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Você é um assistente especializado em saúde e bem-estar."},
+                {"role": "user", "content": mensagem}
+            ]
+        )
+        resposta_texto = resposta.choices[0].message.content.strip()
+        return resposta_texto
+    except Exception as e:
+        print(f"❌ Erro ao conectar com a OpenAI: {e}")
+        return None
 
-    if not relatorio:
-        print("❌ Falha ao gerar o relatório de sono.")
-        return
+# Função de envio de e-mail
+def enviar_email(destinatario, assunto, corpo):
+    msg = MIMEMultipart()
+    msg['From'] = remetente
+    msg['To'] = destinatario
+    msg['Subject'] = assunto
+    msg.attach(MIMEText(corpo, 'plain'))
 
     try:
-        # Configurar o servidor SMTP
-        server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
-        server.starttls()
-        server.login(EMAIL_USER, EMAIL_PASSWORD)
-
-        # Montar e enviar o e-mail para cada destinatário
-        for destinatario in EMAIL_RECIPIENTS:
-            mensagem = MIMEMultipart()
-            mensagem["From"] = EMAIL_USER
-            mensagem["To"] = destinatario.strip()
-            mensagem["Subject"] = "Relatório de Saúde - Sono"
-
-            corpo_email = MIMEText(relatorio, "plain")
-            mensagem.attach(corpo_email)
-
-            # Enviar o e-mail
-            server.send_message(mensagem)
-            print(f"✅ Relatório enviado com sucesso para {destinatario}")
-
-    except smtplib.SMTPException as e:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login(remetente, senha)
+            server.send_message(msg)
+            print("✅ E-mail enviado com sucesso!")
+    except Exception as e:
         print(f"❌ Erro ao enviar e-mail: {e}")
 
-    finally:
-        server.quit()
-
-# Executar a função ao rodar o script
-if __name__ == "__main__":
-    enviar_email_relatorio()
+# Função de envio automático ao salvar dados de sono
+def enviar_relatorio_automatico(destinatario, prompt):
+    resposta = gerar_resposta_openai(prompt)
+    if resposta:
+        assunto = "📊 Relatório Automático de Saúde"
+        corpo = f"Aqui está sua análise de saúde:\n\n{resposta}"
+        enviar_email(destinatario, assunto, corpo)
+    else:
+        print("❌ Falha ao gerar a resposta com a OpenAI.")
