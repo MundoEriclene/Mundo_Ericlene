@@ -1,5 +1,4 @@
-from flask import Flask
-from rotasaude import saude_bp
+from app import app
 
-app = Flask(__name__)
-app.register_blueprint(saude_bp, url_prefix="/api")
+if __name__ == "__main__":
+    app.run()
