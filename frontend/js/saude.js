@@ -85,3 +85,21 @@ function salvarAlimentacao(event) {
   limparFormulario(event.target);
   document.getElementById('opcoesRefeicao').innerHTML = '';
 }
+
+
+async function enviarSono(dadosSono) {
+  try {
+    const resposta = await fetch("https://mundo-ericlene-backend.onrender.com/api/sono", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dadosSono)
+    });
+
+    const resultado = await resposta.json();
+    console.log(resultado.avaliacao);
+  } catch (erro) {
+    console.error("Erro ao enviar os dados de sono:", erro);
+  }
+}
