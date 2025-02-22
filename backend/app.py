@@ -1,5 +1,5 @@
 from flask import Flask
-from rotasaude import saude_bp  # Importa o blueprint de rotasaude
+from rotasaude import saude_bp  # Importando blueprint
 
 # Criar o app Flask
 app = Flask(__name__)
@@ -11,7 +11,3 @@ app.register_blueprint(saude_bp, url_prefix='/saude')
 @app.route('/')
 def home():
     return "🚀 API Mundo Ericlene funcionando!"
-
-# Inicializar o servidor
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
