@@ -1,5 +1,4 @@
-from flask import Flask
-from backend.rotasaude import rotasaude
+from rotasaude import rotasaude
 from app import app
 
 app = Flask(__name__)
