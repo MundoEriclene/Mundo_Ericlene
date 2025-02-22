@@ -10,6 +10,13 @@ CORS(app)
 def log_request():
     print(f"📥 Requisição recebida: {request.method} {request.url}")
 
+@app.route('/saude/sono', methods=['POST'])
+def salvar_sono():
+    data = request.get_json()
+    # Processar os dados...
+    return jsonify({"message": "Dados de sono salvos com sucesso!"}), 200
+
+
 @app.route("/")
 def home():
     return "🌍 Mundo Ericlene está rodando!"

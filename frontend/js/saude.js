@@ -2,10 +2,18 @@
 function salvarDados(chave, dados) {
   try {
     localStorage.setItem(chave, JSON.stringify(dados));
-    exibirMensagem('Dados salvos com sucesso!');
+    Swal.fire({
+      icon: 'success',
+      title: 'Sucesso!',
+      text: 'Dados salvos localmente!',
+    });
     return true;
   } catch (e) {
-    exibirMensagem('Erro ao salvar os dados.');
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro!',
+      text: 'Erro ao salvar os dados no dispositivo.',
+    });
     return false;
   }
 }
@@ -14,15 +22,6 @@ function salvarDados(chave, dados) {
 function carregarDados(chave) {
   const dados = localStorage.getItem(chave);
   return dados ? JSON.parse(dados) : null;
-}
-
-// Função para exibir mensagens no site
-function exibirMensagem(mensagem) {
-  const notificacao = document.createElement('div');
-  notificacao.className = 'notificacao';
-  notificacao.innerText = mensagem;
-  document.body.appendChild(notificacao);
-  setTimeout(() => notificacao.remove(), 3000);
 }
 
 // Função para limpar formulários após envio
@@ -97,7 +96,6 @@ async function salvarSono(event) {
   const justificativaSono = document.getElementById("justificativaSono").value;
 
   if (!horarioReal || qualidadeSono === 0 || justificativaSono.trim() === "") {
-    console.log("❌ Campos obrigatórios não preenchidos.");
     Swal.fire({
       icon: 'error',
       title: 'Campos Incompletos',
@@ -123,22 +121,14 @@ async function salvarSono(event) {
       body: JSON.stringify(dadosSono),
     });
 
-    let data;
-    try {
-      data = await response.json();
-    } catch (e) {
-      console.error("❌ Erro ao processar JSON:", e);
-      return;
-    }
-
+    const data = await response.json();
     console.log("📥 Resposta do servidor:", data);
 
     if (response.ok) {
-      console.log("✅ Dados salvos com sucesso no servidor.");
       Swal.fire({
         icon: 'success',
         title: 'Sucesso!',
-        text: 'Seus dados de sono foram salvos com sucesso!',
+        text: data.message || 'Seus dados de sono foram salvos com sucesso!',
       });
 
       limparFormulario(event.target);
