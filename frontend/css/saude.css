@@ -1,133 +1,158 @@
-/* Tema escuro para Mundo Ericlene */
+/* Tema escuro moderno e responsivo para Mundo Ericlene */
 body {
-    background-color: #121212;
-    color: #E0E0E0;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  header {
-    display: flex;
-    align-items: center;
-    background-color: #1F1F1F;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  }
-  
-  header .logo img {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-  }
-  
-  header h1 {
-    flex-grow: 1;
-    font-size: 1.5rem;
-    color: #BB86FC;
-  }
-  
-  nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 15px;
-  }
-  
-  nav ul li a {
-    color: #E0E0E0;
-    text-decoration: none;
-    font-size: 1rem;
-  }
-  
-  nav ul li a:hover {
-    color: #BB86FC;
-  }
-  
-  main {
-    padding: 20px;
-  }
-  
+  background-color: #121212;
+  color: #E0E0E0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  background-color: #1F1F1F;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+header .logo img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+header h1 {
+  flex-grow: 1;
+  font-size: 1.5rem;
+  color: #BB86FC;
+}
+
+main {
+  padding: 20px;
+  padding-bottom: 80px;
+}
+
+section {
+  background-color: #1E1E1E;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+section:hover {
+  transform: translateY(-5px);
+}
+
+section h2 {
+  color: #BB86FC;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+section .conteudo {
+  display: none;
+  margin-top: 10px;
+}
+
+section.ativo .conteudo {
+  display: block;
+}
+
+form label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+form input, form select, form button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+form input, form select {
+  background-color: #333;
+  color: #E0E0E0;
+}
+
+form button {
+  background-color: #BB86FC;
+  color: #121212;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #3700B3;
+}
+
+.mensagem-sucesso {
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 10px;
+  animation: fadeOut 3s forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+footer {
+  background-color: #1F1F1F;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.menu-inferior ul {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.menu-inferior ul li {
+  flex: 1;
+  text-align: center;
+}
+
+.menu-inferior ul li a {
+  color: #E0E0E0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: block;
+  padding: 5px;
+}
+
+.menu-inferior ul li a:hover {
+  color: #BB86FC;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
   section {
-    background-color: #1E1E1E;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    padding: 15px;
   }
-  
-  section h2 {
-    color: #BB86FC;
+  header h1 {
+    font-size: 1.2rem;
   }
-  
-  form label {
-    display: block;
-    margin: 10px 0 5px;
-  }
-  
-  form input, form select, form button {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  form input, form select {
-    background-color: #333;
-    color: #E0E0E0;
-  }
-  
-  form button {
-    background-color: #BB86FC;
-    color: #121212;
-    cursor: pointer;
-  }
-  
-  form button:hover {
-    background-color: #3700B3;
-  }
-  
-  footer {
-    background-color: #1F1F1F;
-    padding: 10px 20px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5);
-  }
-  
-  .menu-inferior ul {
-    display: flex;
-    justify-content: space-around;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
   .menu-inferior ul li a {
-    color: #E0E0E0;
-    text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
-  
-  .menu-inferior ul li a:hover {
-    color: #BB86FC;
-  }
-  
-  .whatsapp-button {
-    display: block;
-    text-align: center;
-    margin-top: 10px;
-    background-color: #25D366;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    text-decoration: none;
-  }
-  
-  .whatsapp-button:hover {
-    background-color: #128C7E;
-  }
-  
+}

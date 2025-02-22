@@ -14,71 +14,87 @@
       <img src="/assets/img/logo.png" alt="Logo Mundo Ericlene">
     </div>
     <h1>Mundo Ericlene</h1>
-    <nav>
-      <ul>
-        <li><a href="#sono">Sono</a></li>
-        <li><a href="#alimentacao">Alimentação</a></li>
-        <li><a href="#exercicios">Exercícios</a></li>
-        <li><a href="#higiene">Higiene Pessoal</a></li>
-      </ul>
-    </nav>
   </header>
   
   <main>
-    <section id="sono">
-      <h2>Sono</h2>
-      <p>Registre e avalie a qualidade e duração do seu sono.</p>
-      <form>
-        <label for="horarioDormir">Horário de dormir:</label>
-        <input type="time" id="horarioDormir">
-        <label for="horarioAcordar">Horário de acordar:</label>
-        <input type="time" id="horarioAcordar">
-        <label for="qualidadeSono">Qualidade do sono (1-10):</label>
-        <input type="number" id="qualidadeSono" min="1" max="10">
-        <button type="submit">Salvar</button>
-      </form>
+    <section id="sono" class="collapsible">
+      <h2 onclick="toggleSection('sono')">Sono</h2>
+      <div class="content">
+        <p>Hora ideal de dormir e acordar definida automaticamente.</p>
+        <form>
+          <label for="horarioDormir">Horário sugerido para dormir:</label>
+          <input type="time" id="horarioDormir" disabled>
+          <label for="horarioAcordar">Horário sugerido para acordar:</label>
+          <input type="time" id="horarioAcordar" disabled>
+          <label for="horarioReal">Qual foi seu horário real de sono?</label>
+          <input type="time" id="horarioReal">
+          <label for="qualidadeSono">Como você avalia seu sono? (0-100%)</label>
+          <input type="number" id="qualidadeSono" min="0" max="100">
+          <button type="submit">Salvar</button>
+        </form>
+      </div>
     </section>
 
-    <section id="alimentacao">
-      <h2>Alimentação</h2>
-      <p>Monitore suas refeições e hidratação.</p>
-      <form>
-        <label for="calorias">Calorias ingeridas:</label>
-        <input type="number" id="calorias">
-        <label for="hidratacao">Copos de água (meta diária):</label>
-        <input type="number" id="hidratacao" min="0">
-        <button type="submit">Salvar</button>
-      </form>
+    <section id="alimentacao" class="collapsible">
+      <h2 onclick="toggleSection('alimentacao')">Alimentação</h2>
+      <div class="content">
+        <p>Escolha suas refeições do dia.</p>
+        <form>
+          <label for="refeicao">Selecione as refeições:</label>
+          <select id="refeicao">
+            <option>Café da manhã</option>
+            <option>Almoço</option>
+            <option>Jantar</option>
+            <option>Lanches</option>
+            <option>Extras</option>
+          </select>
+          <div id="opcoesRefeicao"></div>
+          <label for="calorias">Calorias ingeridas:</label>
+          <input type="number" id="calorias">
+          <label for="agua">Litros de água ingeridos:</label>
+          <input type="number" id="agua" min="0" step="0.1">
+          <button type="submit">Salvar</button>
+        </form>
+      </div>
     </section>
 
-    <section id="exercicios">
-      <h2>Exercícios</h2>
-      <p>Registre suas atividades físicas, mentais e emocionais.</p>
-      <form>
-        <label for="tipoExercicio">Tipo de exercício:</label>
-        <select id="tipoExercicio">
-          <option value="fisico">Físico</option>
-          <option value="mental">Mental</option>
-          <option value="emocional">Emocional</option>
-        </select>
-        <label for="duracaoExercicio">Duração (minutos):</label>
-        <input type="number" id="duracaoExercicio">
-        <button type="submit">Salvar</button>
-      </form>
+    <section id="exercicios" class="collapsible">
+      <h2 onclick="toggleSection('exercicios')">Exercícios</h2>
+      <div class="content">
+        <p>Registre sua atividade e receba sugestões.</p>
+        <form>
+          <label for="tipoExercicio">Tipo de exercício:</label>
+          <select id="tipoExercicio">
+            <option value="fisico">Físico</option>
+            <option value="mental">Mental</option>
+            <option value="emocional">Emocional</option>
+          </select>
+          <div id="sugestoesExercicio"></div>
+          <label for="duracaoExercicio">Duração sugerida (minutos):</label>
+          <input type="number" id="duracaoExercicio" disabled>
+          <label for="realizado">Duração realizada (minutos):</label>
+          <input type="number" id="realizado">
+          <button type="submit">Salvar</button>
+        </form>
+      </div>
     </section>
 
-    <section id="higiene">
-      <h2>Higiene Pessoal</h2>
-      <p>Monitore seus hábitos de higiene.</p>
-      <form>
-        <label>
-          <input type="checkbox" id="escovacao"> Escovou os dentes?
-        </label>
-        <label>
-          <input type="checkbox" id="banho"> Tomou banho?
-        </label>
-        <button type="submit">Salvar</button>
-      </form>
+    <section id="higiene" class="collapsible">
+      <h2 onclick="toggleSection('higiene')">Higiene Pessoal</h2>
+      <div class="content">
+        <p>Registre todos os seus cuidados pessoais.</p>
+        <form>
+          <label><input type="checkbox" id="escovacao"> Escovou os dentes?</label>
+          <label><input type="checkbox" id="banho"> Tomou banho?</label>
+          <label><input type="checkbox" id="unhas"> Cortou as unhas?</label>
+          <label><input type="checkbox" id="barba"> Fez a barba?</label>
+          <label><input type="checkbox" id="cabelo"> Cortou o cabelo?</label>
+          <label><input type="checkbox" id="ouvidos"> Limpou os ouvidos?</label>
+          <label><input type="checkbox" id="necessidadeMaior"> Necessidade maior?</label>
+          <label><input type="checkbox" id="necessidadeMenor"> Necessidade menor?</label>
+          <button type="submit">Salvar</button>
+        </form>
+      </div>
     </section>
   </main>
 
@@ -92,12 +108,9 @@
         <li><a href="#habilidades">Habilidades</a></li>
       </ul>
     </nav>
-    <a href="https://wa.me/seunumerodetelefone" target="_blank" class="whatsapp-button">
-      Fale comigo no WhatsApp
-    </a>
   </footer>
 
-  <script src="/frontend/js/saude.js"></script>
-  <script src="/js/notifications.js"></script>
+  <script src="../js/saude.js"></script>
+  <script src="../js/notifications.js"></script>
 </body>
 </html>
