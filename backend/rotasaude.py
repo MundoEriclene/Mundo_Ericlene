@@ -7,13 +7,11 @@ saude_bp = Blueprint('saude', __name__)
 @saude_bp.route('/salvar', methods=['POST'])
 def salvar_dados():
     dados = request.json
-    # Aqui, você pode adicionar a lógica de salvar os dados no banco
-    return jsonify({'mensagem': '✅ Dados de saúde salvos com sucesso!'})
+    return jsonify({'mensagem': '✅ Dados de saúde salvos com sucesso!', 'dados': dados})
 
 # Rota para carregar dados de saúde
 @saude_bp.route('/carregar', methods=['GET'])
 def carregar_dados():
-    # Exemplo de dados de saúde
     dados = {
         "sono": 8,
         "exercicio": "corrida",

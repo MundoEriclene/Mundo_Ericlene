@@ -1,5 +1,5 @@
-from app import app  # Importar o app corretamente
+from app import app  # Importação correta agora
 
-# Rodar o aplicativo
+# Rodar o servidor
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
