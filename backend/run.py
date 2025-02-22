@@ -1,4 +1,4 @@
-from backend.app import app  # Agora importando com o caminho correto
+from app import app  # Remover 'backend.' do import
 
 # Rodar o servidor
 if __name__ == "__main__":
