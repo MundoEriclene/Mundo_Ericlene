@@ -1,47 +1,48 @@
+from flask import Blueprint, request, jsonify
 from app.config import get_db_connection
 from app.maquina_relatorios import gerar_relatorio_sono
 from app.medico_online import avaliar_sono_openai
 
-rotasaude = Blueprint('rotasaude', __name__)
+# Definindo as Blueprints
 saude_bp = Blueprint('saude', __name__)
 
-@rotasaude.route('/sono', methods=['POST'])
-def registrar_sono():
-    dados = request.json
-    conn = get_db_connection()
-    cur = conn.cursor()
-
-    cur.execute("""
-        INSERT INTO historico_sono (usuario_id, horario_dormir, horario_acordar, qualidade_sono, justificativa)
-        VALUES (%s, %s, %s, %s, %s)
-    """, (
-        1,
-        dados['horarioDormir'],
-        dados['horarioAcordar'],
-        dados['qualidadeSono'],
-        dados['justificativaSono']
-    ))
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-    # Disparar as funções automáticas
-    gerar_relatorio_sono(dados)
-    avaliar_sono_openai(dados)
-
-    return jsonify({"mensagem": "Dados salvos e análises enviadas por e-mail!"})
-@saude_bp.route('/saude/sono', methods=['POST'])
+# Rota para registrar dados de sono
+@saude_bp.route('/sono', methods=['POST'])
 def registrar_sono():
     dados = request.get_json()
 
     if not dados:
         return jsonify({"message": "Dados inválidos"}), 400
 
-    salvar_dados_sono(dados)
+    # Conexão com o banco de dados
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
 
-    # Disparar o relatório
-    enviar_relatorio_sono(dados)
-    enviar_analise_openai(dados)
+        cur.execute("""
+            INSERT INTO historico_sono (usuario_id, horario_real, qualidade_sono, justificativa)
+            VALUES (%s, %s, %s, %s)
+        """, (
+            1,  # ID do usuário fixo por enquanto
+            dados['horarioReal'],
+            dados['qualidadeSono'],
+            dados['justificativaSono']
+        ))
 
-    return jsonify({"message": "Dados de sono registrados com sucesso!"}), 201
+        conn.commit()
+        cur.close()
+        conn.close()
+
+    except Exception as e:
+        print(f"Erro ao salvar no banco de dados: {e}")
+        return jsonify({"message": "Erro ao salvar os dados."}), 500
+
+    # Funções de relatório e análise com OpenAI
+    try:
+        gerar_relatorio_sono(dados)
+        avaliar_sono_openai(dados)
+    except Exception as e:
+        print(f"Erro ao enviar relatório ou análise: {e}")
+        return jsonify({"message": "Dados salvos, mas houve erro no envio do relatório."}), 500
+
+    return jsonify({"message": "Dados de sono registrados com sucesso e análises enviadas por e-mail!"}), 201

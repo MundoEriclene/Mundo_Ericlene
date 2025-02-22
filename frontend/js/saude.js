@@ -1,7 +1,13 @@
 // Função para salvar dados no armazenamento local (localStorage)
 function salvarDados(chave, dados) {
-  localStorage.setItem(chave, JSON.stringify(dados));
-  exibirMensagem('Dados salvos com sucesso!');
+  try {
+    localStorage.setItem(chave, JSON.stringify(dados));
+    exibirMensagem('Dados salvos com sucesso!');
+    return true;
+  } catch (e) {
+    exibirMensagem('Erro ao salvar os dados.');
+    return false;
+  }
 }
 
 // Função para carregar dados do armazenamento local
@@ -23,7 +29,9 @@ function exibirMensagem(mensagem) {
 function limparFormulario(form) {
   form.reset();
   const seccoes = form.closest('section');
-  if (seccoes) seccoes.classList.remove('ativo');
+  if (seccoes && seccoes.classList.contains('ativo')) {
+    seccoes.classList.remove('ativo');
+  }
 }
 
 // Função para abrir/fechar seções ao clicar no título
@@ -54,14 +62,18 @@ function carregarOpcoesRefeicao() {
   opcoesRefeicaoDiv.style.display = 'block';
 }
 
+// Fecha o menu de opções de refeição ao clicar fora
 document.addEventListener('click', (e) => {
   const refeicaoSelect = document.getElementById('refeicao');
   const opcoesRefeicaoDiv = document.getElementById('opcoesRefeicao');
-  if (!refeicaoSelect.contains(e.target) && !opcoesRefeicaoDiv.contains(e.target)) {
-    opcoesRefeicaoDiv.style.display = 'none';
+  if (refeicaoSelect && opcoesRefeicaoDiv) {
+    if (!refeicaoSelect.contains(e.target) && !opcoesRefeicaoDiv.contains(e.target)) {
+      opcoesRefeicaoDiv.style.display = 'none';
+    }
   }
 });
 
+// Função para salvar dados de alimentação
 function salvarAlimentacao(event) {
   event.preventDefault();
   const refeicoesSelecionadas = [...document.querySelectorAll('#opcoesRefeicao input:checked')].map(input => input.value);
@@ -74,17 +86,17 @@ function salvarAlimentacao(event) {
   document.getElementById('opcoesRefeicao').innerHTML = '';
 }
 
-// Função para registrar dados de sono com envio
+// Função para registrar dados de sono com envio ao servidor
 async function salvarSono(event) {
   event.preventDefault();
 
   console.log("✅ Função salvarSono foi chamada.");
 
   const horarioReal = document.getElementById("horarioReal").value;
-  const qualidadeSono = document.getElementById("qualidadeSono").value;
+  const qualidadeSono = parseInt(document.getElementById("qualidadeSono").value) || 0;
   const justificativaSono = document.getElementById("justificativaSono").value;
 
-  if (!horarioReal || qualidadeSono === "" || justificativaSono.trim() === "") {
+  if (!horarioReal || qualidadeSono === 0 || justificativaSono.trim() === "") {
     console.log("❌ Campos obrigatórios não preenchidos.");
     Swal.fire({
       icon: 'error',
@@ -96,7 +108,7 @@ async function salvarSono(event) {
 
   const dadosSono = {
     horarioReal,
-    qualidadeSono: parseInt(qualidadeSono),
+    qualidadeSono,
     justificativaSono
   };
 
@@ -111,7 +123,14 @@ async function salvarSono(event) {
       body: JSON.stringify(dadosSono),
     });
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      console.error("❌ Erro ao processar JSON:", e);
+      return;
+    }
+
     console.log("📥 Resposta do servidor:", data);
 
     if (response.ok) {
@@ -121,7 +140,7 @@ async function salvarSono(event) {
         title: 'Sucesso!',
         text: 'Seus dados de sono foram salvos com sucesso!',
       });
-        
+
       limparFormulario(event.target);
     } else {
       Swal.fire({

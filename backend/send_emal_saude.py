@@ -1,41 +1,50 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from backend.app.saude import gerar_relatorio_sono  # Função que gera o relatório de sono
+from app.maquina_relatorios import gerar_relatorio_sono  # Corrigida a importação
 import os
 
 # Configuração das variáveis a partir do Render
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_USER = os.getenv("mundoericlene@gmail.com")
-EMAIL_PASSWORD = os.getenv("qffrtpickskghfgm")
-EMAIL_RECIPIENTS = os.getenv("ericlenedesousa@gmail.com,ericlenes6@gmail.com").split(",")  # Lista de destinatários separados por vírgula
+EMAIL_USER = os.getenv("EMAIL_USER")  # Deve ser configurado no Render
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")  # Deve ser configurado no Render
+EMAIL_RECIPIENTS = os.getenv("EMAIL_RECIPIENTS", "").split(",")  # Deve ser configurado como lista separada por vírgula no Render
 
 # Função para enviar e-mail
 def enviar_email_relatorio():
     # Gerar o relatório
     relatorio = gerar_relatorio_sono()
 
-    # Configurar o servidor SMTP
-    server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
-    server.starttls()
-    server.login(EMAIL_USER, EMAIL_PASSWORD)
+    if not relatorio:
+        print("❌ Falha ao gerar o relatório de sono.")
+        return
 
-    # Montar o e-mail
-    for destinatario in EMAIL_RECIPIENTS:
-        mensagem = MIMEMultipart()
-        mensagem["From"] = EMAIL_USER
-        mensagem["To"] = destinatario.strip()
-        mensagem["Subject"] = "Relatório de Saúde - Sono"
+    try:
+        # Configurar o servidor SMTP
+        server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
+        server.starttls()
+        server.login(EMAIL_USER, EMAIL_PASSWORD)
 
-        corpo_email = MIMEText(relatorio, "plain")
-        mensagem.attach(corpo_email)
+        # Montar e enviar o e-mail para cada destinatário
+        for destinatario in EMAIL_RECIPIENTS:
+            mensagem = MIMEMultipart()
+            mensagem["From"] = EMAIL_USER
+            mensagem["To"] = destinatario.strip()
+            mensagem["Subject"] = "Relatório de Saúde - Sono"
 
-        # Enviar o e-mail
-        server.send_message(mensagem)
-        print(f"Relatório enviado para {destinatario}")
+            corpo_email = MIMEText(relatorio, "plain")
+            mensagem.attach(corpo_email)
 
-    server.quit()
+            # Enviar o e-mail
+            server.send_message(mensagem)
+            print(f"✅ Relatório enviado com sucesso para {destinatario}")
+
+    except smtplib.SMTPException as e:
+        print(f"❌ Erro ao enviar e-mail: {e}")
+
+    finally:
+        server.quit()
 
 # Executar a função ao rodar o script
 if __name__ == "__main__":
