@@ -4,6 +4,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Rodar o servidor
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+# Log de requisição para debug
+@app.before_request
+def log_request():
+    print(f"Requisição recebida: {request.method} {request.url}")

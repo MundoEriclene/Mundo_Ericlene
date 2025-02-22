@@ -78,11 +78,14 @@ function salvarAlimentacao(event) {
 async function salvarSono(event) {
   event.preventDefault();
 
+  console.log("✅ Função salvarSono foi chamada.");
+
   const horarioReal = document.getElementById("horarioReal").value;
   const qualidadeSono = document.getElementById("qualidadeSono").value;
   const justificativaSono = document.getElementById("justificativaSono").value;
 
   if (!horarioReal || qualidadeSono === "" || justificativaSono.trim() === "") {
+    console.log("❌ Campos obrigatórios não preenchidos.");
     Swal.fire({
       icon: 'error',
       title: 'Campos Incompletos',
@@ -97,6 +100,8 @@ async function salvarSono(event) {
     justificativaSono
   };
 
+  console.log("📤 Enviando dados:", dadosSono);
+
   try {
     const response = await fetch("https://mundo-ericlene.onrender.com/saude/sono", {
       method: "POST",
@@ -107,6 +112,7 @@ async function salvarSono(event) {
     });
 
     const data = await response.json();
+    console.log("📥 Resposta do servidor:", data);
 
     if (response.ok) {
       Swal.fire({
@@ -123,6 +129,7 @@ async function salvarSono(event) {
       });
     }
   } catch (error) {
+    console.error("🚫 Erro na conexão:", error);
     Swal.fire({
       icon: 'error',
       title: 'Erro de Conexão',
@@ -130,3 +137,8 @@ async function salvarSono(event) {
     });
   }
 }
+
+// Adicionando evento global para capturar erros de rede
+window.addEventListener("error", (e) => {
+  console.error("Erro geral capturado:", e.message);
+});
