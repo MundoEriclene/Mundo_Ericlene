@@ -1,4 +1,4 @@
-/* Tema escuro moderno e responsivo para Mundo Ericlene */
+/* Tema escuro moderno, luxuoso e responsivo para Mundo Ericlene */
 body {
   background-color: #121212;
   color: #E0E0E0;
@@ -24,7 +24,7 @@ header .logo img {
 header h1 {
   flex-grow: 1;
   font-size: 1.5rem;
-  color: #BB86FC;
+  color: #00D1FF;
 }
 
 main {
@@ -36,18 +36,19 @@ section {
   background-color: #1E1E1E;
   padding: 20px;
   margin-bottom: 20px;
-  border-radius: 15px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 section:hover {
-  transform: translateY(-5px);
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
 }
 
 section h2 {
-  color: #BB86FC;
-  font-size: 1.4rem;
+  color: #00D1FF;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
@@ -70,7 +71,7 @@ form input, form select, form button {
   padding: 12px;
   margin-bottom: 15px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   box-sizing: border-box;
 }
 
@@ -80,22 +81,22 @@ form input, form select {
 }
 
 form button {
-  background-color: #BB86FC;
+  background: linear-gradient(135deg, #00D1FF, #3700B3);
   color: #121212;
   cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
 }
 
 form button:hover {
-  background-color: #3700B3;
+  background: linear-gradient(135deg, #3700B3, #00D1FF);
 }
 
 .mensagem-sucesso {
   background-color: #28a745;
   color: #fff;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   text-align: center;
   margin-top: 10px;
   animation: fadeOut 3s forwards;
@@ -113,18 +114,18 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 .menu-inferior ul {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   list-style: none;
   padding: 0;
   margin: 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .menu-inferior ul li {
@@ -138,10 +139,11 @@ footer {
   font-size: 0.9rem;
   display: block;
   padding: 5px;
+  transition: color 0.3s ease;
 }
 
 .menu-inferior ul li a:hover {
-  color: #BB86FC;
+  color: #00D1FF;
 }
 
 /* Responsividade */
@@ -152,7 +154,28 @@ footer {
   header h1 {
     font-size: 1.2rem;
   }
+  .menu-inferior ul {
+    flex-wrap: wrap;
+  }
+  .menu-inferior ul li {
+    flex: 1 1 50%;
+  }
   .menu-inferior ul li a {
     font-size: 0.8rem;
   }
+}
+
+/* Ajustes de Higiene Pessoal */
+#higiene .content {
+  display: none;
+  margin-top: 10px;
+}
+
+#higiene.ativo .content {
+  display: block;
+}
+
+/* Espaçamento para opções de higiene pessoal */
+#higiene form label {
+  margin-bottom: 10px;
 }

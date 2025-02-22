@@ -12,23 +12,24 @@
   <header>
     <div class="logo">
       <img src="/assets/img/logo.png" alt="Logo Mundo Ericlene">
+      <h1>Mundo Ericlene</h1>
     </div>
-    <h1>Mundo Ericlene</h1>
   </header>
   
+  <div id="notification-area"></div>
+
   <main>
     <section id="sono" class="collapsible">
       <h2 onclick="toggleSection('sono')">Sono</h2>
       <div class="content">
-        <p>Hora ideal de dormir e acordar definida automaticamente.</p>
-        <form>
-          <label for="horarioDormir">Horário sugerido para dormir:</label>
+        <form onsubmit="return salvarSono(event)">
+          <label for="horarioDormir">Hora ideal de dormir:</label>
           <input type="time" id="horarioDormir" disabled>
-          <label for="horarioAcordar">Horário sugerido para acordar:</label>
+          <label for="horarioAcordar">Hora ideal de acordar:</label>
           <input type="time" id="horarioAcordar" disabled>
-          <label for="horarioReal">Qual foi seu horário real de sono?</label>
+          <label for="horarioReal">Hora real de sono:</label>
           <input type="time" id="horarioReal">
-          <label for="qualidadeSono">Como você avalia seu sono? (0-100%)</label>
+          <label for="qualidadeSono">Qualidade do sono (0-100%)</label>
           <input type="number" id="qualidadeSono" min="0" max="100">
           <button type="submit">Salvar</button>
         </form>
@@ -38,10 +39,10 @@
     <section id="alimentacao" class="collapsible">
       <h2 onclick="toggleSection('alimentacao')">Alimentação</h2>
       <div class="content">
-        <p>Escolha suas refeições do dia.</p>
-        <form>
-          <label for="refeicao">Selecione as refeições:</label>
-          <select id="refeicao">
+        <form onsubmit="return salvarAlimentacao(event)">
+          <label for="refeicao">Tipo de refeição:</label>
+          <select id="refeicao" onchange="carregarOpcoesRefeicao()">
+            <option value="">Selecione...</option>
             <option>Café da manhã</option>
             <option>Almoço</option>
             <option>Jantar</option>
@@ -61,18 +62,18 @@
     <section id="exercicios" class="collapsible">
       <h2 onclick="toggleSection('exercicios')">Exercícios</h2>
       <div class="content">
-        <p>Registre sua atividade e receba sugestões.</p>
-        <form>
+        <form onsubmit="return salvarExercicios(event)">
           <label for="tipoExercicio">Tipo de exercício:</label>
-          <select id="tipoExercicio">
+          <select id="tipoExercicio" onchange="sugerirExercicio()">
+            <option value="">Selecione...</option>
             <option value="fisico">Físico</option>
             <option value="mental">Mental</option>
             <option value="emocional">Emocional</option>
           </select>
           <div id="sugestoesExercicio"></div>
-          <label for="duracaoExercicio">Duração sugerida (minutos):</label>
+          <label for="duracaoExercicio">Duração sugerida (min):</label>
           <input type="number" id="duracaoExercicio" disabled>
-          <label for="realizado">Duração realizada (minutos):</label>
+          <label for="realizado">Duração realizada (min):</label>
           <input type="number" id="realizado">
           <button type="submit">Salvar</button>
         </form>
@@ -82,8 +83,7 @@
     <section id="higiene" class="collapsible">
       <h2 onclick="toggleSection('higiene')">Higiene Pessoal</h2>
       <div class="content">
-        <p>Registre todos os seus cuidados pessoais.</p>
-        <form>
+        <form onsubmit="return salvarHigiene(event)">
           <label><input type="checkbox" id="escovacao"> Escovou os dentes?</label>
           <label><input type="checkbox" id="banho"> Tomou banho?</label>
           <label><input type="checkbox" id="unhas"> Cortou as unhas?</label>
