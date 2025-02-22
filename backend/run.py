@@ -1,4 +1,4 @@
-from app import app  # Remover 'backend.' do import
+from app import app
 
 # Rodar o servidor
 if __name__ == "__main__":
