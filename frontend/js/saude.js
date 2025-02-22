@@ -34,24 +34,12 @@ function toggleSection(id) {
 
 // Lista de refeições por categoria
 const opcoesRefeicoes = {
-  "Café da manhã": ["Pão com queijo e fiambre", "Bolacha com sumo", "Iogurte com granola", "Frutas frescas", "Aveia com mel", "Panquecas integrais", "Smoothie de frutas", "Ovos mexidos", "Torradas integrais", "Chá verde"],
-  "Almoço": ["Arroz com frango grelhado", "Salada de atum", "Feijoada", "Lasanha de legumes", "Peixe assado", "Bife de peru", "Sopa de legumes", "Espaguete integral", "Estufado de carne", "Salada de quinoa"],
-  "Jantar": ["Sopa leve", "Sanduíche natural", "Salada de frango", "Omelete de claras", "Peixe grelhado", "Wrap integral", "Tapioca com queijo", "Caldo verde", "Carne branca grelhada", "Vegetais cozidos"],
-  "Lanches": ["Frutas secas", "Nozes", "Barra de cereais", "Iogurte natural", "Biscoito integral", "Mix de sementes", "Batata doce", "Pipoca sem óleo", "Suco natural", "Bolacha de arroz"],
-  "Extras": ["Chocolate amargo", "Pedaço de bolo", "Sorvete natural", "Biscoito de aveia", "Chips de batata doce", "Gelatina", "Pão de queijo", "Muffin de banana", "Torrada com abacate", "Frutas cristalizadas"]
+  "Café da manhã": ["Pão com queijo e fiambre", "Bolacha com sumo", "Iogurte com granola", "Frutas frescas", "Aveia com mel"],
+  "Almoço": ["Arroz com frango grelhado", "Salada de atum", "Feijoada", "Lasanha de legumes", "Peixe assado"],
+  "Jantar": ["Sopa leve", "Sanduíche natural", "Salada de frango", "Omelete de claras", "Peixe grelhado"],
+  "Lanches": ["Frutas secas", "Nozes", "Barra de cereais", "Iogurte natural", "Biscoito integral"],
+  "Extras": ["Chocolate amargo", "Pedaço de bolo", "Sorvete natural", "Biscoito de aveia", "Chips de batata doce"]
 };
-
-// Registro de sono
-function salvarSono(event) {
-  event.preventDefault();
-  const horarioDormir = document.getElementById('horarioDormir').value;
-  const horarioAcordar = document.getElementById('horarioAcordar').value;
-  const qualidadeSono = document.getElementById('qualidadeSono').value;
-  const justificativaSono = document.getElementById('justificativaSono').value;
-
-  salvarDados('sono', { horarioDormir, horarioAcordar, qualidadeSono, justificativaSono });
-  limparFormulario(event.target);
-}
 
 // Registro de alimentação
 function carregarOpcoesRefeicao() {
@@ -86,20 +74,59 @@ function salvarAlimentacao(event) {
   document.getElementById('opcoesRefeicao').innerHTML = '';
 }
 
+// Função para registrar dados de sono com envio
+async function salvarSono(event) {
+  event.preventDefault();
 
-async function enviarSono(dadosSono) {
+  const horarioReal = document.getElementById("horarioReal").value;
+  const qualidadeSono = document.getElementById("qualidadeSono").value;
+  const justificativaSono = document.getElementById("justificativaSono").value;
+
+  if (!horarioReal || qualidadeSono === "" || justificativaSono.trim() === "") {
+    Swal.fire({
+      icon: 'error',
+      title: 'Campos Incompletos',
+      text: 'Por favor, preencha todos os campos.',
+    });
+    return false;
+  }
+
+  const dadosSono = {
+    horarioReal,
+    qualidadeSono: parseInt(qualidadeSono),
+    justificativaSono
+  };
+
   try {
-    const resposta = await fetch("https://mundo-ericlene-backend.onrender.com/api/sono", {
+    const response = await fetch("https://mundo-ericlene.onrender.com/saude/sono", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(dadosSono)
+      body: JSON.stringify(dadosSono),
     });
 
-    const resultado = await resposta.json();
-    console.log(resultado.avaliacao);
-  } catch (erro) {
-    console.error("Erro ao enviar os dados de sono:", erro);
+    const data = await response.json();
+
+    if (response.ok) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Sucesso!',
+        text: 'Seus dados de sono foram salvos com sucesso!',
+      });
+      limparFormulario(event.target);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro!',
+        text: data.message || 'Ocorreu um erro ao salvar os dados.',
+      });
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro de Conexão',
+      text: 'Não foi possível conectar ao servidor.',
+    });
   }
 }
