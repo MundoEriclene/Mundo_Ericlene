@@ -1,4 +1,8 @@
-from app import app
+from flask import Flask
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
 
 # Rodar o servidor
 if __name__ == "__main__":

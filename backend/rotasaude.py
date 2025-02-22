@@ -1,7 +1,6 @@
-from flask import Blueprint, request, jsonify
-from backend.config import get_db_connection
-from backend.app.maquina_relatorios import gerar_relatorio_sono
-from backend.app.medico_online import avaliar_sono_openai
+from app.config import get_db_connection
+from app.maquina_relatorios import gerar_relatorio_sono
+from app.medico_online import avaliar_sono_openai
 
 rotasaude = Blueprint('rotasaude', __name__)
 saude_bp = Blueprint('saude', __name__)
