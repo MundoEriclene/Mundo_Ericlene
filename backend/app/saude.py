@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from backend.config import get_db_connection
+from app.config import get_db_connection
 import openai
 import os
 
