@@ -26,6 +26,12 @@ function limparFormulario(form) {
   if (seccoes) seccoes.classList.remove('ativo');
 }
 
+// Função para abrir/fechar seções ao clicar no título
+function toggleSection(id) {
+  const secao = document.getElementById(id);
+  secao.classList.toggle('ativo');
+}
+
 // Lista de refeições por categoria
 const opcoesRefeicoes = {
   "Café da manhã": ["Pão com queijo e fiambre", "Bolacha com sumo", "Iogurte com granola", "Frutas frescas", "Aveia com mel", "Panquecas integrais", "Smoothie de frutas", "Ovos mexidos", "Torradas integrais", "Chá verde"],
@@ -36,122 +42,46 @@ const opcoesRefeicoes = {
 };
 
 // Registro de sono
-const formSono = document.querySelector('#sono form');
-formSono.addEventListener('submit', (e) => {
-  e.preventDefault();
+function salvarSono(event) {
+  event.preventDefault();
   const horarioDormir = document.getElementById('horarioDormir').value;
   const horarioAcordar = document.getElementById('horarioAcordar').value;
   const qualidadeSono = document.getElementById('qualidadeSono').value;
+  const justificativaSono = document.getElementById('justificativaSono').value;
 
-  salvarDados('sono', { horarioDormir, horarioAcordar, qualidadeSono });
-  limparFormulario(formSono);
-});
+  salvarDados('sono', { horarioDormir, horarioAcordar, qualidadeSono, justificativaSono });
+  limparFormulario(event.target);
+}
 
 // Registro de alimentação
-const formAlimentacao = document.querySelector('#alimentacao form');
-const refeicaoSelect = document.getElementById('refeicao');
-const opcoesRefeicaoDiv = document.getElementById('opcoesRefeicao');
-const caloriasInput = document.getElementById('calorias');
-
-refeicaoSelect.addEventListener('change', () => {
+function carregarOpcoesRefeicao() {
+  const refeicaoSelect = document.getElementById('refeicao');
+  const opcoesRefeicaoDiv = document.getElementById('opcoesRefeicao');
   const categoria = refeicaoSelect.value;
   const opcoes = opcoesRefeicoes[categoria] || [];
   opcoesRefeicaoDiv.innerHTML = opcoes.map(opcao => `
     <label>
       <input type="checkbox" value="${opcao}" data-calorias="150"> ${opcao}
     </label>`).join('');
-});
-
-opcoesRefeicaoDiv.addEventListener('change', () => {
-  let totalCalorias = 0;
-  opcoesRefeicaoDiv.querySelectorAll('input:checked').forEach(input => {
-    totalCalorias += parseInt(input.getAttribute('data-calorias'));
-  });
-  caloriasInput.value = totalCalorias;
-});
-
-formAlimentacao.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const refeicoesSelecionadas = [...opcoesRefeicaoDiv.querySelectorAll('input:checked')].map(input => input.value);
-  const calorias = caloriasInput.value;
-  const agua = document.getElementById('agua').value;
-
-  salvarDados('alimentacao', { refeicoesSelecionadas, calorias, agua });
-  limparFormulario(formAlimentacao);
-  opcoesRefeicaoDiv.innerHTML = '';
-});
-
-// Registro de exercícios
-const formExercicios = document.querySelector('#exercicios form');
-const tipoExercicioSelect = document.getElementById('tipoExercicio');
-const duracaoExercicioInput = document.getElementById('duracaoExercicio');
-
-// Sugestão de duração para o exercício
-const sugestoes = {
-  fisico: 30,
-  mental: 15,
-  emocional: 20
-};
-
-tipoExercicioSelect.addEventListener('change', () => {
-  const tipo = tipoExercicioSelect.value;
-  duracaoExercicioInput.value = sugestoes[tipo] || 0;
-});
-
-formExercicios.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const tipoExercicio = tipoExercicioSelect.value;
-  const duracaoExercicio = duracaoExercicioInput.value;
-  const realizado = document.getElementById('realizado').value;
-
-  salvarDados('exercicios', { tipoExercicio, duracaoExercicio, realizado });
-  limparFormulario(formExercicios);
-});
-
-// Registro de higiene pessoal
-const formHigiene = document.querySelector('#higiene form');
-formHigiene.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const higieneDados = {};
-  formHigiene.querySelectorAll('input[type="checkbox"]').forEach((input) => {
-    higieneDados[input.id] = input.checked;
-  });
-  salvarDados('higiene', higieneDados);
-  limparFormulario(formHigiene);
-});
-
-// Carregar dados preenchidos anteriormente
-function carregarDadosPreenchidos() {
-  const sono = carregarDados('sono');
-  if (sono) {
-    document.getElementById('horarioDormir').value = sono.horarioDormir;
-    document.getElementById('horarioAcordar').value = sono.horarioAcordar;
-    document.getElementById('qualidadeSono').value = sono.qualidadeSono;
-  }
-
-  const alimentacao = carregarDados('alimentacao');
-  if (alimentacao) {
-    alimentacao.refeicoesSelecionadas.forEach(refeicao => {
-      const checkbox = [...opcoesRefeicaoDiv.querySelectorAll('input')].find(input => input.value === refeicao);
-      if (checkbox) checkbox.checked = true;
-    });
-    caloriasInput.value = alimentacao.calorias;
-    document.getElementById('agua').value = alimentacao.agua;
-  }
-
-  const exercicios = carregarDados('exercicios');
-  if (exercicios) {
-    tipoExercicioSelect.value = exercicios.tipoExercicio;
-    duracaoExercicioInput.value = exercicios.duracaoExercicio;
-    document.getElementById('realizado').value = exercicios.realizado;
-  }
-
-  const higiene = carregarDados('higiene');
-  if (higiene) {
-    for (const key in higiene) {
-      document.getElementById(key).checked = higiene[key];
-    }
-  }
+  opcoesRefeicaoDiv.style.display = 'block';
 }
 
-window.onload = carregarDadosPreenchidos;
+document.addEventListener('click', (e) => {
+  const refeicaoSelect = document.getElementById('refeicao');
+  const opcoesRefeicaoDiv = document.getElementById('opcoesRefeicao');
+  if (!refeicaoSelect.contains(e.target) && !opcoesRefeicaoDiv.contains(e.target)) {
+    opcoesRefeicaoDiv.style.display = 'none';
+  }
+});
+
+function salvarAlimentacao(event) {
+  event.preventDefault();
+  const refeicoesSelecionadas = [...document.querySelectorAll('#opcoesRefeicao input:checked')].map(input => input.value);
+  const descricaoRefeicao = document.getElementById('descricaoRefeicao').value;
+  const calorias = document.getElementById('calorias').value;
+  const agua = document.getElementById('agua').value;
+
+  salvarDados('alimentacao', { refeicoesSelecionadas, descricaoRefeicao, calorias, agua });
+  limparFormulario(event.target);
+  document.getElementById('opcoesRefeicao').innerHTML = '';
+}

@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mundo Ericlene - Saúde</title>
-  <link rel="icon" href="/assets/img/favicon.png" type="image/png">
+  <link rel="icon" href="../assets/logo.webp" type="image/png">
   <link rel="stylesheet" href="../css/saude.css">
   <link rel="manifest" href="/assets/manifest.json">
 </head>
 <body>
   <header>
     <div class="logo">
-      <img src="/assets/img/logo.png" alt="Logo Mundo Ericlene">
+      <img src="../assets/logo.webp" alt="Logo Mundo Ericlene">
       <h1>Mundo Ericlene</h1>
     </div>
   </header>
@@ -31,6 +31,8 @@
           <input type="time" id="horarioReal">
           <label for="qualidadeSono">Qualidade do sono (0-100%)</label>
           <input type="number" id="qualidadeSono" min="0" max="100">
+          <label for="justificativaSono">Justifique sua avaliação:</label>
+          <textarea id="justificativaSono" rows="3"></textarea>
           <button type="submit">Salvar</button>
         </form>
       </div>
@@ -50,6 +52,8 @@
             <option>Extras</option>
           </select>
           <div id="opcoesRefeicao"></div>
+          <label for="descricaoRefeicao">O que você comeu?</label>
+          <textarea id="descricaoRefeicao" rows="3" placeholder="Descreva sua refeição"></textarea>
           <label for="calorias">Calorias ingeridas:</label>
           <input type="number" id="calorias">
           <label for="agua">Litros de água ingeridos:</label>
