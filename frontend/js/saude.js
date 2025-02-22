@@ -115,11 +115,13 @@ async function salvarSono(event) {
     console.log("📥 Resposta do servidor:", data);
 
     if (response.ok) {
+      console.log("✅ Dados salvos com sucesso no servidor.");
       Swal.fire({
         icon: 'success',
         title: 'Sucesso!',
         text: 'Seus dados de sono foram salvos com sucesso!',
       });
+        
       limparFormulario(event.target);
     } else {
       Swal.fire({
