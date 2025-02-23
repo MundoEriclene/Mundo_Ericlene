@@ -31,6 +31,9 @@ function limparFormulario(form) {
   if (seccoes && seccoes.classList.contains('ativo')) {
     seccoes.classList.remove('ativo');
   }
+  // Limpar campos de entrada específicos
+  document.getElementById("horarioReal").value = '';
+  document.getElementById('opcoesRefeicao').innerHTML = '';
 }
 
 // Função para abrir/fechar seções ao clicar no título
@@ -61,6 +64,19 @@ function carregarOpcoesRefeicao() {
   opcoesRefeicaoDiv.style.display = 'block';
 }
 
+// Cálculo automático de calorias ao selecionar opções
+function calcularCalorias() {
+  const selecionados = document.querySelectorAll('#opcoesRefeicao input:checked');
+  let total = 0;
+  selecionados.forEach(item => {
+    total += parseInt(item.getAttribute('data-calorias')) || 0;
+  });
+  document.getElementById('calorias').value = total;
+}
+
+// Evento de mudança nas opções de refeição
+document.getElementById('opcoesRefeicao').addEventListener('change', calcularCalorias);
+
 // Fecha o menu de opções de refeição ao clicar fora
 document.addEventListener('click', (e) => {
   const refeicaoSelect = document.getElementById('refeicao');
@@ -82,7 +98,6 @@ function salvarAlimentacao(event) {
 
   salvarDados('alimentacao', { refeicoesSelecionadas, descricaoRefeicao, calorias, agua });
   limparFormulario(event.target);
-  document.getElementById('opcoesRefeicao').innerHTML = '';
 }
 
 // Função para registrar dados de sono com envio ao servidor
@@ -132,6 +147,7 @@ async function salvarSono(event) {
       });
 
       limparFormulario(event.target);
+      enviarNotificacao("Dados de Sono Salvos", "Seu registro de sono foi salvo com sucesso!");
     } else {
       Swal.fire({
         icon: 'error',
@@ -147,6 +163,26 @@ async function salvarSono(event) {
       text: 'Não foi possível conectar ao servidor.',
     });
   }
+}
+
+// Função de notificação push
+function enviarNotificacao(titulo, mensagem) {
+  if (Notification.permission === "granted") {
+    new Notification(titulo, { body: mensagem });
+  }
+}
+
+// Pedir permissão para notificações ao carregar a página
+if (Notification.permission !== "granted") {
+  Notification.requestPermission();
+}
+
+// Sugestão de duração de exercícios
+function sugerirExercicio() {
+  const tipo = document.getElementById('tipoExercicio').value;
+  const duracaoInput = document.getElementById('duracaoExercicio');
+  const sugestoes = { fisico: 30, mental: 20, emocional: 15 };
+  duracaoInput.value = sugestoes[tipo] || 0;
 }
 
 // Adicionando evento global para capturar erros de rede

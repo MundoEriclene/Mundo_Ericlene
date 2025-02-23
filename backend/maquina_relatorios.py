@@ -1,5 +1,5 @@
-from datetime import datetime
-from send_email_saude import enviar_email_relatorio  # Função correta importada do módulo de e-mail
+from datetime import datetime, timedelta
+from app.send_emal_saude import enviar_email_relatorio  # Corrigida a importação
 
 def calcular_saude_e_tempo(tempo_sono):
     if tempo_sono >= 8:
@@ -20,11 +20,16 @@ def gerar_relatorio_sono(dados_sono):
         horario_dormir = datetime.strptime(dados_sono.get("horarioDormir"), "%H:%M")
         horario_acordar = datetime.strptime(dados_sono.get("horarioAcordar"), "%H:%M")
 
+        # Ajusta caso tenha dormido após a meia-noite
+        if horario_acordar <= horario_dormir:
+            horario_acordar += timedelta(days=1)
+
         # Calcula a duração do sono
         tempo_sono = (horario_acordar - horario_dormir).seconds / 3600  # Em horas
 
+        # Cálculo de saúde e tempo de vida
         saude, anos_adicionados = calcular_saude_e_tempo(tempo_sono)
-        expectativa_vida_base = 79  # Valor padrão
+        expectativa_vida_base = 79  # Valor padrão de expectativa de vida
         estimativa_vida = expectativa_vida_base + anos_adicionados
 
         # Gera o relatório
@@ -39,7 +44,10 @@ def gerar_relatorio_sono(dados_sono):
         """
 
         # Enviar e-mail com o relatório
-        enviar_email_relatorio(relatorio)
+        enviar_email_relatorio(
+            assunto="📊 Relatório Diário de Sono",
+            mensagem=relatorio
+        )
 
         return relatorio  # Retorna o relatório em caso de sucesso
 
