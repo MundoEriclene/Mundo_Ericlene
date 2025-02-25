@@ -2,15 +2,11 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
-
-
-
 # 📂 Diretório de logs
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
 # 🔧 Configuração do Logger
-
 def setup_logger(name):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
@@ -29,18 +25,17 @@ def setup_logger(name):
 
     return logger
 
-
 # ✅ Logger principal do aplicativo
-app_logger = configurar_logger("app") # type: ignore
+app_logger = setup_logger("app")
 
 # ✅ Logger para o envio de e-mails
-email_logger = configurar_logger("email")  # type: ignore
+email_logger = setup_logger("email")
 
 # ✅ Logger para dados de saúde
-saude_logger = configurar_logger("saude")  # type: ignore
+saude_logger = setup_logger("saude")
 
 # ✅ Logger para relatórios
-relatorio_logger = configurar_logger("relatorio")  # type: ignore
+relatorio_logger = setup_logger("relatorio")
 
 # ✅ Logger para erros gerais
-erro_logger = configurar_logger("erro")  # type: ignore
+erro_logger = setup_logger("erro")
