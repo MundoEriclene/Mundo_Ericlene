@@ -1,50 +1,66 @@
 import openai
-from app.send_emal_saude import enviar_email_relatorio  # Corrigido o nome da função
 import os
+from dotenv import load_dotenv
 
-# Configurar API da OpenAI
+# Carregar as variáveis de ambiente (caso você esteja usando .env no Render, isso já deve estar configurado)
+load_dotenv()
+
+# Configurar a chave da API da OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-if not openai.api_key:
-    raise ValueError("❌ A chave da API da OpenAI não está configurada. Verifique suas variáveis de ambiente.")
+# ✅ Função para analisar os dados de sono usando a OpenAI
+def analisar_sono_com_openai(dados_sono):
+    horario_real = dados_sono.get("horarioReal", "Não informado")
+    qualidade_sono = dados_sono.get("qualidadeSono", 0)
+    justificativa = dados_sono.get("justificativaSono", "Sem justificativa.")
 
-def avaliar_sono_openai(dados_sono):
-    # Garantir que todos os dados necessários estão presentes
-    horario_dormir = dados_sono.get('horarioDormir', 'Não informado')
-    horario_acordar = dados_sono.get('horarioAcordar', 'Não informado')
-    qualidade_sono = dados_sono.get('qualidadeSono', 'Não informado')
-    justificativa = dados_sono.get('justificativaSono', 'Não informado')
-
-    prompt = f"""
-    💤 Avaliação de Sono Personalizada 💤
-
-    Dados fornecidos:
-    - Horário de dormir: {horario_dormir}
-    - Horário de acordar: {horario_acordar}
-    - Qualidade do sono (0-100): {qualidade_sono}
-    - Justificativa: {justificativa}
-
-    Baseando-se nesses dados, forneça um parecer médico personalizado sobre a qualidade do sono, possíveis causas para a pontuação indicada e recomendações baseadas em estudos científicos sobre os efeitos do sono de menos de 8 horas ou mais de 9 horas.
-    """
+    # 🔥 Prompts personalizados com base nos dados de sono
+    prompt = (
+        f"Eu sou um médico especialista em saúde do sono.\n"
+        f"Um usuário forneceu os seguintes dados:\n"
+        f"- Hora real de sono: {horario_real}\n"
+        f"- Qualidade do sono (0-100): {qualidade_sono}\n"
+        f"- Justificativa dada pelo usuário: {justificativa}\n\n"
+        f"Com base nessas informações, faça uma análise detalhada do sono. "
+        f"Dê sugestões personalizadas para melhorar a qualidade do sono e "
+        f"explique como a qualidade do sono atual pode afetar a saúde geral.\n"
+        f"Forneça a resposta em formato de relatório."
+    )
 
     try:
+        # ✅ Enviando o prompt para a OpenAI
         resposta = openai.Completion.create(
-            model="text-davinci-003",  # Pode ser atualizado para "gpt-3.5-turbo" com ajustes na API
+            engine="text-davinci-003",
             prompt=prompt,
-            max_tokens=500
+            max_tokens=500,
+            temperature=0.7
         )
 
-        avaliacao = resposta.choices[0].text.strip()
-
-        # Enviar a avaliação por e-mail
-        enviar_email_relatorio(
-            assunto="🩺 Avaliação Médica Personalizada do Sono",
-            mensagem=avaliacao
-        )
-        print("✅ Avaliação enviada por e-mail com sucesso.")
-
-    except openai.error.OpenAIError as e:
-        print(f"❌ Erro na API da OpenAI: {e}")
+        analise = resposta.choices[0].text.strip()
+        return analise
 
     except Exception as e:
-        print(f"❌ Erro inesperado ao avaliar o sono: {e}")
+        print(f"🚫 Erro ao analisar dados com a OpenAI: {e}")
+        return "Erro ao gerar análise do sono. Tente novamente mais tarde."
+
+
+# ✅ Função para calcular uma pontuação geral de saúde com base na qualidade do sono
+def calcular_saude_percentual(qualidade_sono):
+    if qualidade_sono >= 90:
+        return 95
+    elif qualidade_sono >= 75:
+        return 85
+    elif qualidade_sono >= 50:
+        return 70
+    elif qualidade_sono >= 30:
+        return 50
+    else:
+        return 30
+
+
+# ✅ Função para estimar o impacto do sono na expectativa de vida (simplificado)
+def estimar_tempo_vida(qualidade_sono):
+    perda_anual_em_anos = (100 - qualidade_sono) * 0.05  # Exemplo simplificado
+    expectativa_base = 80  # Expectativa média de vida
+    expectativa_final = expectativa_base - perda_anual_em_anos
+    return round(expectativa_final, 2)

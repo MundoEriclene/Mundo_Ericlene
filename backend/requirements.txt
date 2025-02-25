@@ -1,5 +1,39 @@
-flask
-gunicorn
-psycopg2-binary
-openai
-flask-cors
+# 🔥 Framework principal
+Flask==2.3.2
+Flask-Cors==3.0.10
+
+# 📡 Envio de e-mails
+smtplib3==1.0.0
+email-validator==2.0.0
+
+# 🗄️ Banco de dados PostgreSQL
+psycopg2-binary==2.9.6
+SQLAlchemy==2.0.23
+
+# 🤖 Integração com OpenAI para análise de dados
+openai==1.12.0
+
+# 📈 Geração de relatórios em PDF
+reportlab==4.0.4
+
+# 🛡️ Variáveis de ambiente seguras (caso necessário)
+python-dotenv==1.0.0
+
+# 🔍 Logs e monitoramento
+loguru==0.7.0
+
+# ✅ Validação de dados
+pydantic==2.3.0
+
+# 📧 Notificações e integração com APIs
+requests==2.31.0
+
+# 🛠️ Ferramentas de manipulação de datas e horas
+python-dateutil==2.8.2
+
+# 🔍 Linting e formatação de código
+black==24.1.1
+isort==5.12.0
+
+# 🧪 Testes
+pytest==7.4.0

@@ -1,60 +1,56 @@
-from datetime import datetime, timedelta
-from app.send_emal_saude import enviar_email_relatorio  # Corrigida a importação
+from medico_online import analisar_sono_com_openai, calcular_saude_percentual, estimar_tempo_vida
+import datetime
 
-def calcular_saude_e_tempo(tempo_sono):
-    if tempo_sono >= 8:
-        anos_adicionados = 0.2  # Cada boa noite de sono adiciona 0.2 anos
-        saude_percentual = 100
-    elif 6 <= tempo_sono < 8:
-        anos_adicionados = 0
-        saude_percentual = 90
-    else:
-        anos_adicionados = -0.1  # Reduz 0.1 anos
-        saude_percentual = 80
-
-    return saude_percentual, anos_adicionados
-
+# ✅ Função principal para gerar o relatório completo
 def gerar_relatorio_sono(dados_sono):
-    try:
-        # Converte as strings de horário para datetime
-        horario_dormir = datetime.strptime(dados_sono.get("horarioDormir"), "%H:%M")
-        horario_acordar = datetime.strptime(dados_sono.get("horarioAcordar"), "%H:%M")
+    horario_real = dados_sono.get("horarioReal", "Não informado")
+    qualidade_sono = dados_sono.get("qualidadeSono", 0)
+    justificativa = dados_sono.get("justificativaSono", "Sem justificativa.")
 
-        # Ajusta caso tenha dormido após a meia-noite
-        if horario_acordar <= horario_dormir:
-            horario_acordar += timedelta(days=1)
+    # 🔍 Análise detalhada usando a OpenAI
+    analise_detalhada = analisar_sono_com_openai(dados_sono)
 
-        # Calcula a duração do sono
-        tempo_sono = (horario_acordar - horario_dormir).seconds / 3600  # Em horas
+    # 📊 Cálculos de saúde e expectativa de vida
+    saude_percentual = calcular_saude_percentual(qualidade_sono)
+    expectativa_vida = estimar_tempo_vida(qualidade_sono)
 
-        # Cálculo de saúde e tempo de vida
-        saude, anos_adicionados = calcular_saude_e_tempo(tempo_sono)
-        expectativa_vida_base = 79  # Valor padrão de expectativa de vida
-        estimativa_vida = expectativa_vida_base + anos_adicionados
+    # 📅 Data do relatório
+    data_atual = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
 
-        # Gera o relatório
-        relatorio = f"""
-        💤 Relatório Diário de Sono 💤
+    # 📝 Estrutura do relatório
+    relatorio = f"""
+    📅 **Relatório de Sono - {data_atual}**
 
-        ⏰ Horário de dormir: {dados_sono.get('horarioDormir')}
-        ⏰ Horário de acordar: {dados_sono.get('horarioAcordar')}
-        😴 Duração do sono: {tempo_sono:.2f} horas
-        ✅ Saúde atual: {saude}%
-        🕒 Expectativa de vida estimada: {estimativa_vida:.2f} anos
-        """
+    🕒 **Informações Registradas:**
+    - Hora real de sono: {horario_real}
+    - Qualidade do sono: {qualidade_sono}%
+    - Justificativa: {justificativa}
 
-        # Enviar e-mail com o relatório
-        enviar_email_relatorio(
-            assunto="📊 Relatório Diário de Sono",
-            mensagem=relatorio
-        )
+    🩺 **Análise Médica:**
+    {analise_detalhada}
 
-        return relatorio  # Retorna o relatório em caso de sucesso
+    💡 **Resumo de Saúde:**
+    - Saúde geral estimada: {saude_percentual}%
+    - Expectativa de vida projetada: {expectativa_vida} anos
 
-    except ValueError as e:
-        print(f"❌ Erro ao converter horários: {e}")
-        return None
+    🔔 **Recomendações:**
+    - Tente manter uma rotina de sono consistente.
+    - Evite o uso de eletrônicos antes de dormir.
+    - Hidrate-se bem durante o dia e pratique exercícios físicos regularmente.
+    """
 
-    except Exception as e:
-        print(f"❌ Erro inesperado ao gerar relatório: {e}")
-        return None
+    return relatorio
+
+
+# ✅ Função para criar um assunto de e-mail personalizado
+def gerar_assunto_relatorio():
+    data_atual = datetime.datetime.now().strftime("%d/%m/%Y")
+    return f"📧 Relatório de Saúde do Sono - {data_atual}"
+
+
+# ✅ Função para logar o relatório no console (para debug)
+def logar_relatorio(relatorio):
+    print("📝 Relatório Gerado:")
+    print("=" * 40)
+    print(relatorio)
+    print("=" * 40)
